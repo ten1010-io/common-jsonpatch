@@ -1,0 +1,10 @@
+plugins {
+    id "java-library"
+}
+
+description = "Core module of Common jsonpatch"
+
+dependencies {
+    implementation(platform("tools.jackson:jackson-bom:$jacksonVersion"))
+    implementation("tools.jackson.core:jackson-core")
+}

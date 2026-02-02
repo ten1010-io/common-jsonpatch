@@ -1,0 +1,11 @@
+plugins {
+    id "java-library"
+}
+
+description = "Jackson module of Common jsonpatch"
+
+dependencies {
+    api(project(":common-jsonpatch-core"))
+    api(platform("tools.jackson:jackson-bom:$jacksonVersion"))
+    api("tools.jackson.core:jackson-databind")
+}
