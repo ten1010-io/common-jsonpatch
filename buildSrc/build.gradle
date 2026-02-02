@@ -1,0 +1,56 @@
+plugins {
+    id "java-gradle-plugin"
+    id "io.spring.javaformat" version "${springJavaFormatVersion}"
+    id "checkstyle"
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+java {
+    sourceCompatibility = "${javaVersion}"
+    targetCompatibility = "${javaVersion}"
+}
+
+checkstyle {
+    toolVersion = "${checkstyleToolVersion}"
+    configDirectory = rootProject.file("checkstyle")
+}
+
+configurations {
+    mockitoAgent
+}
+
+dependencies {
+    checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:${springJavaFormatVersion}")
+
+    api("org.jspecify:jspecify:${jspecifyVersion}")
+    implementation("io.spring.javaformat:spring-javaformat-gradle-plugin:${springJavaFormatVersion}")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    mockitoAgent("org.mockito:mockito-core:${mockitoVersion}") {
+        transitive = false
+    }
+    testImplementation(platform("org.junit:junit-bom:${junitJupiterVersion}"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:${assertjVersion}")
+    testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+}
+
+gradlePlugin {
+    plugins {
+        conventionsPlugin {
+            id = "io.ten1010.common.jsonpatch.conventions"
+            implementationClass = "io.ten1010.common.jsonpatch.build.ConventionsPlugin"
+        }
+    }
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+}
+
+jar.dependsOn check

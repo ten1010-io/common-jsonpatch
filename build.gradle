@@ -1,0 +1,17 @@
+plugins {
+    id "base"
+}
+
+description = "Common jsonpatch"
+
+allprojects {
+    group = "io.ten1010.common.jsonpatch"
+}
+
+subprojects {
+    apply plugin: "io.ten1010.common.jsonpatch.conventions"
+
+    repositories {
+        mavenCentral()
+    }
+}
